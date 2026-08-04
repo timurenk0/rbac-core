@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "pg": "^8.22.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.20.3",
+    "tsx": "^4.23.5",
+    "vitest": "^4.1.10"
+  },
+  "name": "0_rbac_api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}
