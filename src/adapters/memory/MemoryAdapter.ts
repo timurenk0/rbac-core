@@ -21,11 +21,11 @@ export class MemoryAdapter implements StorageAdapter {
         this.permissions.push(permission);
     }
 
-    createUserRole(userRole: UserRole) {
+    assignUserRole(userRole: UserRole) {
         this.userRoles.push(userRole);
     }
 
-    createRolePermission(rolePermission: RolePermission) {
+    assignRolePermission(rolePermission: RolePermission) {
         this.rolePermissions.push(rolePermission);
     }
     
