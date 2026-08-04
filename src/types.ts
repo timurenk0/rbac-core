@@ -22,4 +22,5 @@ export interface UserRole {
 export interface RolePermission {
     roleId: string;
     permissionId: string;
+    isInherited: boolean;
 }
