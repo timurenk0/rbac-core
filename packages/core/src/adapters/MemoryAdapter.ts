@@ -47,7 +47,7 @@ export class MemoryAdapter implements StorageAdapter {
     }
 
     async createRole(input: Omit<Role, "id">): Promise<Role> {
-        const duplicate = [...this.roles.values()].find(r => r.name === InputDeviceInfo.name);
+        const duplicate = [...this.roles.values()].find(r => r.name === input.name);
         if (duplicate) throw new DuplicateRoleError(input.name);
 
         const role: Role = {
