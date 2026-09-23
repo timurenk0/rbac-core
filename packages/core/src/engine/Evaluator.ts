@@ -34,7 +34,7 @@ export class Evaluator<Context = unknown> {
                 const verdict = await plugin.resolve({
                     subject: { id: request.subject },
                     role: candidate.role,
-                    context: (request.context ?? {}) as Context,
+                    context: request.context,
                     now: this.clock()
                 });
 

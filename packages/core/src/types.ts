@@ -52,7 +52,7 @@ export interface ConditionResolver<Context = unknown> {
     resolve(input: {
         readonly subject: Subject;
         readonly role: Role;
-        readonly context: Context;
+        readonly context: Context | undefined;
         readonly now: Date;
     }): Promise<ConditionVerdict> | ConditionVerdict;
 }
