@@ -104,6 +104,13 @@ export interface CacheOptions {
     readonly ttlMs?: number;
 }
 
+export interface RoleForgeConfig<Context = unknown> {
+    readonly adapter: StorageAdapter,
+    readonly plugins?: ConditionResolver<Context>[],
+    readonly cache?: CacheOptions;
+    readonly clock?: () => Date;
+}
+
 export interface StorageAdapter {
     getSubjectRoleIds(subjectId: string): Promise<string[]>;
 
