@@ -81,7 +81,7 @@ export interface TraceNode {
 export interface Decision {
     readonly granted: boolean;
     readonly subject: string;
-    readonly actoin: string;
+    readonly action: string;
     readonly resource: string;
     readonly evaluatedAt: string;
     readonly trace: TraceNode[]
