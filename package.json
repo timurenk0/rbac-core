@@ -1,0 +1,23 @@
+{
+  "name": "roleforge",
+  "version": "0.1.0",
+  "private": true,
+  "description": "RoleForge - embeddable, extensible RBAC for TypeScript applications",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "packages/adapters/*",
+    "packages/plugins/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "test": "npm run test --workspace=@roleforge/core",
+    "test:watch": "npm run test:watch --workspace=@roleforge/core",
+    "typecheck": "npm run typecheck --workspace=@roleforge/core",
+    "build": "npm run build --workspace=@roleforge/core"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}
