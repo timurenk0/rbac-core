@@ -45,3 +45,46 @@ export function getAncestorChain(
 
     return ancestors;
 }
+
+export function expandRoles(
+    roles: Role[],
+    directRoles: Role[]
+): Array<{
+    role: Role;
+    source: "direct" | { inheritedVia: string };
+}> {
+    const result: Array<{
+        role: Role,
+        source: "direct" | { inheritedVia: string }
+    }> = [];
+
+    const seen = new Set<string>();
+
+    for (const directRole of directRoles) {
+        if (!seen.has(directRole.id)) {
+            result.push({
+                role: directRole,
+                source: "direct"
+            });
+        
+            seen.add(directRole.id);
+        }
+
+        const ancestors = getAncestorChain(roles, directRole);
+
+        for (const ancestor of ancestors) {
+            if (seen.has(ancestor.id)) continue;
+
+            result.push({
+                role: ancestor,
+                source: {
+                    inheritedVia: directRole.id
+                }
+            });
+
+            seen.add(ancestor.id);
+        }
+    }
+
+    return result;
+}
