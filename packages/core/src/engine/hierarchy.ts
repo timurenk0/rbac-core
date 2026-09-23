@@ -24,3 +24,24 @@ export function validateParentAssignment(
         currentId = current.parentId ?? null;
     }
 }
+
+export function getAncestorChain(
+    roles: Role[],
+    role: Role
+): Role[] {
+    const roleById = new Map(roles.map(r => [r.id, r]));
+
+    const ancestors: Role[] = [];
+
+    let currentParentId: string | null = role.parentId ?? null;
+
+    while (currentParentId != null) {
+        const parent = roleById.get(currentParentId);
+        if (!parent) throw new RoleNotFoundError(currentParentId);
+
+        ancestors.push(parent);
+        currentParentId = parent.parentId ?? null;
+    }
+
+    return ancestors;
+}
