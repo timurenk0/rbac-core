@@ -19,7 +19,7 @@ export class RoleForge<Context = unknown> {
 
         const ttlMs = cacheOptions?.ttlMs ?? DEFAULT_CACHE_TTL;
 
-        this.cache = new ModelCache(adapter, enabled ? ttlMs : 0);
+        this.cache = new ModelCache(adapter, enabled ? ttlMs : 0, enabled);
 
         this.evaluator = new Evaluator(adapter, this.cache, plugins, clock);
     }

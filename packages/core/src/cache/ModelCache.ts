@@ -11,16 +11,23 @@ export interface AuthorizationModel {
 }
 
 export class ModelCache {
+    private readonly enabled: boolean;
+    private readonly ttlMs: number;
     private entry: CacheEntry<AuthorizationModel> | null = null;
 
     constructor(
         private readonly adapter: StorageAdapter,
-        private readonly ttlMs: number
-    ) {}
+        ttlMs: number,
+        enabled = true
+    ) {
+        this.ttlMs = ttlMs;
+        this.enabled = enabled;
+    }
 
     async get(): Promise<AuthorizationModel> {
         const now = Date.now();
-        if (this.entry != null && this.entry.expiresAt > now) return this.entry.value;
+
+        if (this.enabled && this.entry != null && this.entry.expiresAt > now) return this.entry.value;
 
         const [roles, permissions] = await Promise.all([
             this.adapter.getRoles(),
