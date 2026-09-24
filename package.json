@@ -17,6 +17,7 @@
     "build": "npm run build --workspace=@roleforge/core"
   },
   "devDependencies": {
+    "@types/node": "^26.6.2",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   }
