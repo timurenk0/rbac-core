@@ -122,9 +122,9 @@ export class PostgresAdapter implements StorageAdapter{
                 action: row.action,
                 resource: row.resource
             });
-
-            return result;
         }
+
+        return result;
     }
 
     async getAllPermissions(): Promise<Permission[]> {
