@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { DuplicatePermissionError, DuplicateRoleError, MemoryAdapter, PermissionNotFoundError, RoleForge, RoleNotFoundError } from "../src/index.js";
+import { DuplicatePermissionError, DuplicatePluginError, DuplicateRoleError, MemoryAdapter, PermissionNotFoundError, RoleForge, RoleNotFoundError } from "../src/index.js";
 
 describe("management API", () => {
     let adapter: MemoryAdapter;
@@ -194,5 +194,19 @@ describe("management API", () => {
         await expect(
             rf.grantPermission(role.id, "missing")
         ).rejects.toBeInstanceOf(PermissionNotFoundError);
+    });
+
+    it("rejects duplicate plugin names", async () => {
+        const plugin = {
+            name: "temporal",
+            resolve: () => ({ admissible: true as const })
+        }
+
+        await expect(
+            RoleForge.init({
+                adapter,
+                plugins: [plugin, plugin]
+            })
+        ).rejects.toBeInstanceOf(DuplicatePluginError);
     });
 })
