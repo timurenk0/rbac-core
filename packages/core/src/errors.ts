@@ -46,3 +46,10 @@ export class DuplicateAssignmentError extends RoleForgeError {
         this.name = "DuplicateAssignmentError";
     }
 }
+
+export class DuplicatePluginError extends RoleForgeError {
+    constructor(name: string) {
+        super(`Plugin with name ${name} is already registered`);
+        this.name = "DuplicatePluginError";
+    }
+}

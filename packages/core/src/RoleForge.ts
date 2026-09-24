@@ -1,6 +1,7 @@
 import { ModelCache } from "./cache/ModelCache.js";
 import { Evaluator } from "./engine/Evaluator.js";
 import { validateParentAssignment } from "./engine/hierarchy.js";
+import { DuplicatePluginError } from "./errors.js";
 import type { CacheOptions, CheckRequest, ConditionResolver, Decision, Graph, Permission, Role, RoleForgeConfig, StorageAdapter, SubjectRoles } from "./types.js";
 
 const DEFAULT_CACHE_TTL = 5000;
@@ -29,9 +30,19 @@ export class RoleForge<Context = unknown> {
     ): Promise<RoleForge<Context>> {
         await config.adapter.migrate();
 
+        const plugins = config.plugins ?? [];
+
+        const pluginNames = new Set<string>();
+        
+        for (const plugin of plugins) {
+            if (pluginNames.has(plugin.name)) throw new DuplicatePluginError(plugin.name);
+        
+            pluginNames.add(plugin.name);
+        }
+
         return new RoleForge(
             config.adapter,
-            config.plugins ?? [],
+            plugins,
             config.cache,
             config.clock ?? (() => new Date())
         );
