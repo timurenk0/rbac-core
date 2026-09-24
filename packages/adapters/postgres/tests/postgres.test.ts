@@ -1,7 +1,7 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest"
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest"
 import { createPostgresPool, PostgresAdapter } from "../src/index.js"
 
-const databaseUrl = process.env.DATABASE_URL;
+const databaseUrl = process.env.TEST_DATABASE_URL;
 
 const describeIfDatabase = databaseUrl ? describe : describe.skip;
 
@@ -14,19 +14,18 @@ describeIfDatabase("PostgreSQL Adapter", () => {
 
   beforeAll(async () => {
     await adapter.migrate();
-
-    await pool.query(`
-      TRUNCATE TABLE
-        rbac_subject_roles,
-        rbac_role_permissions,
-        rbac_permissions,
-        rbac_roles,
-        rbac_migrations
-      RESTART IDENTITY CASCADE
-    `);
-
-    await adapter.migrate();
   });
+  
+  beforeEach(async () => {
+    await pool.query(`
+            TRUNCATE TABLE
+                rbac_subject_roles,
+                rbac_role_permissions,
+                rbac_permissions,
+                rbac_roles
+            CASCADE
+        `)
+  })
 
   afterAll(async () => {
     await pool.end();

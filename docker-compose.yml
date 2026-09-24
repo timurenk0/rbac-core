@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: roleforge-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: roleforge
+      POSTGRES_PASSWORD: roleforge
+      POSTGRES_DB: roleforge_test
+    ports:
+      - "54329:5432"
+    volumes:
+      - roleforge-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  roleforge-postgres-data:

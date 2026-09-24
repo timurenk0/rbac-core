@@ -96,7 +96,7 @@ export class PostgresAdapter implements StorageAdapter{
                     p.id,
                     p.action,
                     p.resource
-                FROM rbac_role_permissoins rp
+                FROM rbac_role_permissions rp
                 INNER JOIN rbac_permissions p
                     ON p.id = rp.permission_id
                 WHERE rp.role_id = ANY($1::text[])
@@ -153,7 +153,7 @@ export class PostgresAdapter implements StorageAdapter{
             `
                 INSERT INTO rbac_roles (id, name, parent_id, meta)
                 VALUES ($1, $2, $3, $4::jsonb)
-                RETURN id, name, parent_id, meta
+                RETURNING id, name, parent_id, meta
             `,
             [id, role.name, role.parentId ?? null, JSON.stringify(role.meta ?? {})]
         );
@@ -210,7 +210,7 @@ export class PostgresAdapter implements StorageAdapter{
 
         const result = await this.pool.query<PermissionRow>(
             `
-                INSERT INTO rbac_permissoins (id, action, resource)
+                INSERT INTO rbac_permissions (id, action, resource)
                 VALUES ($1, $2, $3)
                 RETURNING id, action, resource
             `,
@@ -297,7 +297,7 @@ export class PostgresAdapter implements StorageAdapter{
                 `
                     CREATE TABLE IF NOT EXISTS rbac_migrations (
                         id TEXT PRIMARY KEY,
-                        applied_at TIMESTAMPZ NOT NULL DEFAULT NOW()
+                        applied_at TIMESTAMP NOT NULL DEFAULT NOW()
                     )
                 `
             );
@@ -356,7 +356,7 @@ export class PostgresAdapter implements StorageAdapter{
         const result = await this.pool.query(
             `
                 SELECT 1
-                FROM rbac_permission
+                FROM rbac_permissions
                 WHERE id = $1
             `,
             [permissionId]
