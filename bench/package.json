@@ -1,0 +1,20 @@
+{
+  "name": "@roleforge/bench",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "bench": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@roleforge/core": "0.1.0",
+    "@roleforge/adapter-postgres": "0.1.0",
+    "casbin": "^5.43.0",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2"
+  }
+}
