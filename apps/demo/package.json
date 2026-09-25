@@ -1,0 +1,15 @@
+{
+  "name": "@roleforge/demo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "demo": "tsx src/usecase.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@roleforge/core": "0.1.0",
+    "@roleforge/plugin-temporal": "0.1.0"
+  },
+  "devDependencies": { "tsx": "^4.20.3", "typescript": "^5.9.2" }
+}
