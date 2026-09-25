@@ -8,7 +8,8 @@
     "packages/*",
     "packages/adapters/*",
     "packages/plugins/*",
-    "apps/*"
+    "apps/*",
+    "bench"
   ],
   "scripts": {
     "test": "npm run test --workspace=@roleforge/core",

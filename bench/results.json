@@ -1,0 +1,456 @@
+{
+  "generatedAt": "2026-09-25T04:36:51.900Z",
+  "workload": {
+    "subjects": 1000,
+    "roles": 20,
+    "hierarchyDepth": 3,
+    "permissions": 100,
+    "warmupChecks": 1000,
+    "measuredChecks": 10000,
+    "repetitions": 5
+  },
+  "environment": {
+    "nodeVersion": "v22.17.0",
+    "platform": "Windows_NT 10.0.26200",
+    "architecture": "x64 · 12th Gen Intel(R) Core(TM) i5-1235U · 12 core(s) · PostgreSQL 17.11 (Debian 17.11-1.pgdg13+2)",
+    "cpuCount": 12,
+    "postgresUrl": "postgres://***@localhost:54329/roleforge_bench"
+  },
+  "results": [
+    {
+      "configuration": "roleforge-memory",
+      "warmupChecks": 1000,
+      "measuredChecks": 10000,
+      "repetition": 5,
+      "runs": [
+        {
+          "run": 1,
+          "stats": {
+            "meanMs": 0.01160798000000008,
+            "standardDeviationMs": 0.013748247318098305,
+            "p50Ms": 0.0097,
+            "p95Ms": 0.02290499999999993,
+            "p99Ms": 0.04230100000000002,
+            "minMs": 0.0047,
+            "maxMs": 0.4741
+          },
+          "granted": 1725,
+          "denied": 8275
+        },
+        {
+          "run": 2,
+          "stats": {
+            "meanMs": 0.009254660000000083,
+            "standardDeviationMs": 0.011196986571591478,
+            "p50Ms": 0.0083,
+            "p95Ms": 0.0128,
+            "p99Ms": 0.019501000000000022,
+            "minMs": 0.0042,
+            "maxMs": 0.4483
+          },
+          "granted": 1858,
+          "denied": 8142
+        },
+        {
+          "run": 3,
+          "stats": {
+            "meanMs": 0.00923410000000006,
+            "standardDeviationMs": 0.010721723517700142,
+            "p50Ms": 0.0083,
+            "p95Ms": 0.0132,
+            "p99Ms": 0.02250100000000002,
+            "minMs": 0.0043,
+            "maxMs": 0.4085
+          },
+          "granted": 1774,
+          "denied": 8226
+        },
+        {
+          "run": 4,
+          "stats": {
+            "meanMs": 0.009763790000000045,
+            "standardDeviationMs": 0.03914339466418228,
+            "p50Ms": 0.0083,
+            "p95Ms": 0.0136,
+            "p99Ms": 0.02260100000000002,
+            "minMs": 0.0042,
+            "maxMs": 3.4611
+          },
+          "granted": 1790,
+          "denied": 8210
+        },
+        {
+          "run": 5,
+          "stats": {
+            "meanMs": 0.008534189999999999,
+            "standardDeviationMs": 0.015077137130234659,
+            "p50Ms": 0.0077,
+            "p95Ms": 0.0118,
+            "p99Ms": 0.018304000000000088,
+            "minMs": 0.004,
+            "maxMs": 1.2406
+          },
+          "granted": 1831,
+          "denied": 8169
+        }
+      ],
+      "aggregate": {
+        "meanMs": 0.009678944000000052,
+        "standardDeviationMs": 0.0010408403864685684,
+        "p50Ms": 0.00846,
+        "p95Ms": 0.014860999999999989,
+        "p99Ms": 0.025041600000000035,
+        "minMs": 0.004,
+        "maxMs": 3.4611
+      }
+    },
+    {
+      "configuration": "roleforge-postgres-cache",
+      "warmupChecks": 1000,
+      "measuredChecks": 10000,
+      "repetition": 5,
+      "runs": [
+        {
+          "run": 1,
+          "stats": {
+            "meanMs": 1.250055609999998,
+            "standardDeviationMs": 0.44462658450943826,
+            "p50Ms": 1.1773,
+            "p95Ms": 1.7371199999999998,
+            "p99Ms": 2.317197000000002,
+            "minMs": 0.9289,
+            "maxMs": 28.3423
+          },
+          "granted": 1725,
+          "denied": 8275
+        },
+        {
+          "run": 2,
+          "stats": {
+            "meanMs": 1.237080959999997,
+            "standardDeviationMs": 0.24323701853845903,
+            "p50Ms": 1.1817,
+            "p95Ms": 1.6518749999999989,
+            "p99Ms": 2.1723340000000007,
+            "minMs": 0.9473,
+            "maxMs": 5.6975
+          },
+          "granted": 1858,
+          "denied": 8142
+        },
+        {
+          "run": 3,
+          "stats": {
+            "meanMs": 1.2119507899999977,
+            "standardDeviationMs": 0.3923587628859275,
+            "p50Ms": 1.1541,
+            "p95Ms": 1.5720399999999994,
+            "p99Ms": 2.1766140000000003,
+            "minMs": 0.9633,
+            "maxMs": 32.1414
+          },
+          "granted": 1774,
+          "denied": 8226
+        },
+        {
+          "run": 4,
+          "stats": {
+            "meanMs": 1.2033996399999944,
+            "standardDeviationMs": 0.2820925467357668,
+            "p50Ms": 1.1414,
+            "p95Ms": 1.5883099999999986,
+            "p99Ms": 2.571600000000002,
+            "minMs": 0.9369,
+            "maxMs": 5.6905
+          },
+          "granted": 1790,
+          "denied": 8210
+        },
+        {
+          "run": 5,
+          "stats": {
+            "meanMs": 1.1576146600000048,
+            "standardDeviationMs": 0.25003876678044157,
+            "p50Ms": 1.1005500000000001,
+            "p95Ms": 1.4907,
+            "p99Ms": 2.069806,
+            "minMs": 0.9357,
+            "maxMs": 14.1242
+          },
+          "granted": 1831,
+          "denied": 8169
+        }
+      ],
+      "aggregate": {
+        "meanMs": 1.2120203319999985,
+        "standardDeviationMs": 0.031965655822182505,
+        "p50Ms": 1.1510099999999999,
+        "p95Ms": 1.6080089999999996,
+        "p99Ms": 2.261510200000001,
+        "minMs": 0.9289,
+        "maxMs": 32.1414
+      }
+    },
+    {
+      "configuration": "roleforge-postgres-no-cache",
+      "warmupChecks": 1000,
+      "measuredChecks": 10000,
+      "repetition": 5,
+      "runs": [
+        {
+          "run": 1,
+          "stats": {
+            "meanMs": 2.2396939199999992,
+            "standardDeviationMs": 0.5340695940353031,
+            "p50Ms": 2.0827,
+            "p95Ms": 3.2695799999999986,
+            "p99Ms": 4.687167000000013,
+            "minMs": 1.7272,
+            "maxMs": 7.7137
+          },
+          "granted": 1725,
+          "denied": 8275
+        },
+        {
+          "run": 2,
+          "stats": {
+            "meanMs": 2.2035622000000172,
+            "standardDeviationMs": 0.4096805426953534,
+            "p50Ms": 2.0831,
+            "p95Ms": 2.9886399999999993,
+            "p99Ms": 3.951331000000003,
+            "minMs": 1.732,
+            "maxMs": 9.2076
+          },
+          "granted": 1858,
+          "denied": 8142
+        },
+        {
+          "run": 3,
+          "stats": {
+            "meanMs": 2.1748049000000074,
+            "standardDeviationMs": 0.38756690886347633,
+            "p50Ms": 2.0591,
+            "p95Ms": 2.9782100000000002,
+            "p99Ms": 3.781406,
+            "minMs": 1.7364,
+            "maxMs": 6.9488
+          },
+          "granted": 1774,
+          "denied": 8226
+        },
+        {
+          "run": 4,
+          "stats": {
+            "meanMs": 2.197155849999996,
+            "standardDeviationMs": 0.4535445231262054,
+            "p50Ms": 2.0514,
+            "p95Ms": 3.10811,
+            "p99Ms": 4.200267000000001,
+            "minMs": 1.7145,
+            "maxMs": 7.896
+          },
+          "granted": 1790,
+          "denied": 8210
+        },
+        {
+          "run": 5,
+          "stats": {
+            "meanMs": 2.113591840000002,
+            "standardDeviationMs": 0.3859176830872286,
+            "p50Ms": 2.0159,
+            "p95Ms": 2.802659999999999,
+            "p99Ms": 3.7563100000000027,
+            "minMs": 1.6058,
+            "maxMs": 8.2455
+          },
+          "granted": 1831,
+          "denied": 8169
+        }
+      ],
+      "aggregate": {
+        "meanMs": 2.1857617420000044,
+        "standardDeviationMs": 0.04167471407760747,
+        "p50Ms": 2.05844,
+        "p95Ms": 3.0294399999999997,
+        "p99Ms": 4.075296200000004,
+        "minMs": 1.6058,
+        "maxMs": 9.2076
+      }
+    },
+    {
+      "configuration": "casbin-in-process",
+      "warmupChecks": 1000,
+      "measuredChecks": 10000,
+      "repetition": 5,
+      "runs": [
+        {
+          "run": 1,
+          "stats": {
+            "meanMs": 0.5925929600000008,
+            "standardDeviationMs": 0.4055010150374945,
+            "p50Ms": 0.5489,
+            "p95Ms": 1.1432799999999974,
+            "p99Ms": 2.172406,
+            "minMs": 0.0111,
+            "maxMs": 8.1211
+          },
+          "granted": 1725,
+          "denied": 8275
+        },
+        {
+          "run": 2,
+          "stats": {
+            "meanMs": 0.5675404399999998,
+            "standardDeviationMs": 0.3918141291793918,
+            "p50Ms": 0.52785,
+            "p95Ms": 1.0189699999999988,
+            "p99Ms": 2.0144490000000013,
+            "minMs": 0.0103,
+            "maxMs": 9.3779
+          },
+          "granted": 1858,
+          "denied": 8142
+        },
+        {
+          "run": 3,
+          "stats": {
+            "meanMs": 0.5654685700000016,
+            "standardDeviationMs": 0.3739836009334561,
+            "p50Ms": 0.5248,
+            "p95Ms": 1.0639649999999947,
+            "p99Ms": 1.950447000000001,
+            "minMs": 0.0106,
+            "maxMs": 8.484
+          },
+          "granted": 1774,
+          "denied": 8226
+        },
+        {
+          "run": 4,
+          "stats": {
+            "meanMs": 0.5604587200000014,
+            "standardDeviationMs": 0.3869179600431627,
+            "p50Ms": 0.5211,
+            "p95Ms": 0.962544999999995,
+            "p99Ms": 1.9762170000000003,
+            "minMs": 0.0102,
+            "maxMs": 8.3037
+          },
+          "granted": 1790,
+          "denied": 8210
+        },
+        {
+          "run": 5,
+          "stats": {
+            "meanMs": 0.5713451200000013,
+            "standardDeviationMs": 0.39641425362136806,
+            "p50Ms": 0.5222,
+            "p95Ms": 1.1423099999999986,
+            "p99Ms": 2.0234170000000025,
+            "minMs": 0.0103,
+            "maxMs": 10.1995
+          },
+          "granted": 1831,
+          "denied": 8169
+        }
+      ],
+      "aggregate": {
+        "meanMs": 0.571481162000001,
+        "standardDeviationMs": 0.011125657754053608,
+        "p50Ms": 0.5289699999999999,
+        "p95Ms": 1.0662139999999969,
+        "p99Ms": 2.0273872000000006,
+        "minMs": 0.0102,
+        "maxMs": 10.1995
+      }
+    },
+    {
+      "configuration": "loopback-http-pdp",
+      "warmupChecks": 1000,
+      "measuredChecks": 10000,
+      "repetition": 5,
+      "runs": [
+        {
+          "run": 1,
+          "stats": {
+            "meanMs": 0.45904986999999864,
+            "standardDeviationMs": 0.35479593185376773,
+            "p50Ms": 0.3869,
+            "p95Ms": 0.6620199999999997,
+            "p99Ms": 2.29545500000001,
+            "minMs": 0.2829,
+            "maxMs": 11.326
+          },
+          "granted": 1725,
+          "denied": 8275
+        },
+        {
+          "run": 2,
+          "stats": {
+            "meanMs": 0.3651614800000011,
+            "standardDeviationMs": 0.2849239633765642,
+            "p50Ms": 0.3239,
+            "p95Ms": 0.4420049999999999,
+            "p99Ms": 1.2135560000000034,
+            "minMs": 0.2736,
+            "maxMs": 8.8366
+          },
+          "granted": 1858,
+          "denied": 8142
+        },
+        {
+          "run": 3,
+          "stats": {
+            "meanMs": 0.37001426000000004,
+            "standardDeviationMs": 0.31067310279561183,
+            "p50Ms": 0.322,
+            "p95Ms": 0.47520499999999993,
+            "p99Ms": 1.9415370000000183,
+            "minMs": 0.2715,
+            "maxMs": 10.449
+          },
+          "granted": 1774,
+          "denied": 8226
+        },
+        {
+          "run": 4,
+          "stats": {
+            "meanMs": 0.3631197800000003,
+            "standardDeviationMs": 0.2862072041873708,
+            "p50Ms": 0.3203,
+            "p95Ms": 0.46810999999999986,
+            "p99Ms": 1.0752630000000034,
+            "minMs": 0.271,
+            "maxMs": 6.7537
+          },
+          "granted": 1790,
+          "denied": 8210
+        },
+        {
+          "run": 5,
+          "stats": {
+            "meanMs": 0.3624349200000002,
+            "standardDeviationMs": 0.2839357690615857,
+            "p50Ms": 0.3185,
+            "p95Ms": 0.45400499999999994,
+            "p99Ms": 1.3516800000000018,
+            "minMs": 0.2738,
+            "maxMs": 5.7543
+          },
+          "granted": 1831,
+          "denied": 8169
+        }
+      ],
+      "aggregate": {
+        "meanMs": 0.38395606200000004,
+        "standardDeviationMs": 0.0376404047695298,
+        "p50Ms": 0.33432000000000006,
+        "p95Ms": 0.5002689999999999,
+        "p99Ms": 1.5754982000000073,
+        "minMs": 0.271,
+        "maxMs": 11.326
+      }
+    }
+  ]
+}
