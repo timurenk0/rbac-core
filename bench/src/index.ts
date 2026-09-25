@@ -14,7 +14,7 @@ const { Pool } = pg;
 const dataset = createDataset();
 const results: BenchmarkResult[] = [];
 
-// (a) RoleForge, in-memory adapter — the in-process ceiling
+// (a) RoleForge, in-memory adapter
 console.log("rf-memory: seeding…");
 const memoryAdapter = new MemoryAdapter();
 await seedRoleForgeModel(memoryAdapter, dataset);

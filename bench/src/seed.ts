@@ -2,10 +2,6 @@ import { RoleForge, StorageAdapter } from "@roleforge/core";
 import type { Enforcer } from "casbin";
 import { BenchmarkDataset, HIERARCHY_DEPTH, mulberry32, ROLE_COUNT, SUBJECT_COUNT } from "./dataset.js";
 
-/** Seed the RoleForge model through the public management API on the given adapter:
- *  ROLE_COUNT roles in depth-HIERARCHY_DEPTH chains (parentId = role being extended),
- *  each permission granted to one seeded-random role, each subject assigned 1–3 roles.
- *  Seed 42 everywhere so the RoleForge and casbin models are the same model. */
 export async function seedRoleForgeModel(adapter: StorageAdapter, dataset: BenchmarkDataset): Promise<void> {
     const rf = await RoleForge.init({ adapter });
     const rnd = mulberry32(42);
@@ -32,9 +28,6 @@ export async function seedRoleForgeModel(adapter: StorageAdapter, dataset: Bench
     }
 }
 
-/** The equivalent model in casbin grouping/policy terms (same seed, same distributions).
- *  Inheritance direction: in RoleForge a child extends its parent, so the casbin grouping
- *  edge goes child -> parent. */
 export async function seedCasbinModel(enforcer: Enforcer, dataset: BenchmarkDataset): Promise<void> {
     const rnd = mulberry32(42);
     for (let i = 0; i < ROLE_COUNT; i++)

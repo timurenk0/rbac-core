@@ -5,8 +5,6 @@ import { BenchmarkRequest, BenchmarkResult, BenchmarkRun } from "./types.js";
 
 export type CheckFn = (request: BenchmarkRequest) => Promise<boolean>;
 
-/** Shared measurement loop: per repetition, a freshly seeded request stream (seed = 1000 + run),
- *  WARMUP_CHECKS excluded, MEASURED_CHECKS timed with hrtime. */
 export async function runConfiguration(
     configuration: string,
     dataset: BenchmarkDataset,
@@ -24,7 +22,7 @@ export async function runConfiguration(
             const start = process.hrtime.bigint();
             const result = await check(request);
             const end = process.hrtime.bigint();
-            timings.push(Number(end - start) / 1_000_000); // ms, per his BenchmarkStats unit
+            timings.push(Number(end - start) / 1_000_000);
             result ? granted++ : denied++;
         }
         runs.push({ run, stats: calculateStatistics(timings), granted, denied });

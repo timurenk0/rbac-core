@@ -34,8 +34,7 @@ export function calculateStatistics(values: number[]): BenchmarkStats {
         maxMs: Math.max(...values),
     }
 }
-/** Aggregate repetition stats per metric (never mix metrics in one distribution):
- *  mean of run means, SD *between* run means, and the mean of each percentile. */
+
 export function aggregateAcrossRuns(runStats: BenchmarkStats[]): BenchmarkStats {
     if (runStats.length === 0) throw new Error("Cannot aggregate zero runs");
     const avg = (pick: (s: BenchmarkStats) => number) =>
@@ -45,7 +44,7 @@ export function aggregateAcrossRuns(runStats: BenchmarkStats[]): BenchmarkStats 
         runStats.reduce((sum, s) => sum + Math.pow(s.meanMs - meanOfMeans, 2), 0) / runStats.length;
     return {
         meanMs: meanOfMeans,
-        standardDeviationMs: Math.sqrt(betweenRunVariance), // between-run SD of means
+        standardDeviationMs: Math.sqrt(betweenRunVariance),
         p50Ms: avg(s => s.p50Ms),
         p95Ms: avg(s => s.p95Ms),
         p99Ms: avg(s => s.p99Ms),

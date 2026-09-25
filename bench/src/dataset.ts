@@ -14,8 +14,6 @@ export interface BenchmarkDataset {
     permissions: Array<{ action: string; resource: string }>;
 }
 
-/** Deterministic PRNG so every repetition draws its own, reproducible request stream
- *  (protocol: uniform-random subject and permission, PRNG seeded per repetition). */
 export function mulberry32(seed: number): () => number {
     let s = seed | 0;
     return () => {
@@ -35,7 +33,6 @@ export function createDataset(): BenchmarkDataset {
     return { roleNames, permissions };
 }
 
-/** One repetition's request stream: WARMUP + MEASURED uniform-random draws. */
 export function createRequests(dataset: BenchmarkDataset, runSeed: number): BenchmarkRequest[] {
     const rnd = mulberry32(runSeed);
     const requests: BenchmarkRequest[] = [];

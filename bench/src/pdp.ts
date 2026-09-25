@@ -7,8 +7,6 @@ import { BenchmarkResult } from "./types.js";
 
 const PORT = 18080;
 
-/** RoleForge (in-memory) behind a minimal loopback HTTP server. Measures transport
- *  overhead only — a LOWER BOUND for real sidecar/SaaS decision points. */
 export async function benchmarkLoopbackPdp(dataset: BenchmarkDataset): Promise<BenchmarkResult> {
     const adapter = new MemoryAdapter();
     await seedRoleForgeModel(adapter, dataset);

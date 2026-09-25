@@ -11,6 +11,5 @@ const MODEL_PATH = join(dirname(fileURLToPath(import.meta.url)), "..", "casbin-m
 export async function benchmarkCasbin(dataset: BenchmarkDataset): Promise<BenchmarkResult> {
     const enforcer = await newEnforcer(MODEL_PATH);
     await seedCasbinModel(enforcer, dataset);
-    // casbin request order is (sub, obj, act)
     return runConfiguration("casbin-in-process", dataset, r => enforcer.enforce(r.subject, r.resource, r.action));
 }
