@@ -33,7 +33,7 @@ export interface BenchmarkResult {
 export interface BenchmarkEnvironment {
     nodeVersion: string;
     platform: string;
-    architecure: string;
+    architecture: string;
     cpuCount: number;
     postgresUrl: string
 }
