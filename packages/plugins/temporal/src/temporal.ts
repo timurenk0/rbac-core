@@ -36,7 +36,7 @@ function isWithinHours(
     date: Date,
     hours: NonNullable<TemporalRule["hours"]>
 ): boolean {
-    const currentMinutes = date.getHours()*60 - date.getMinutes();
+    const currentMinutes = date.getHours()*60 + date.getMinutes();
 
     const from = parseTime(hours.from);
     const until = parseTime(hours.until);
