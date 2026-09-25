@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>RoleForge — role graph & decision simulator</title>
+<style>
+  :root { --ok:#1d7a3e; --no:#b3261e; --idle:#8a8f98; --edge:#b9bec7; --ink:#1c1e21; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.45 system-ui, sans-serif; color:var(--ink); background:#f6f7f9; }
+  header { padding:14px 22px; background:#fff; border-bottom:1px solid #e3e5e8; }
+  header h1 { margin:0; font-size:17px; } header span { color:#5b6069; font-weight:400; }
+  main { display:grid; grid-template-columns: 1fr 380px; gap:18px; padding:18px 22px; }
+  .card { background:#fff; border:1px solid #e3e5e8; border-radius:10px; padding:16px; }
+  .card h2 { margin:0 0 10px; font-size:14px; text-transform:uppercase; letter-spacing:.04em; color:#5b6069; }
+  svg { width:100%; height:460px; }
+  .role rect { fill:#fff; stroke:#7a828e; stroke-width:1.4; rx:8; }
+  .role text { font-size:12.5px; }
+  .role .name { font-weight:600; fill:var(--ink); }
+  .role .holder rect { fill:#1c1e21; stroke:none; }
+  .role .holder text { fill:#fff; font-size:10.5px; font-weight:600; }
+  .rightcol { display:flex; flex-direction:column; gap:18px; }
+  #subjects { margin:0; padding:0; list-style:none; }
+  #subjects li { display:flex; justify-content:space-between; gap:10px; padding:7px 9px; border-radius:7px; cursor:pointer; }
+  #subjects li:hover { background:#f0f2f5; }
+  #subjects li.sel { background:#eef1ff; outline:1px solid #b9c2f0; }
+  #subjects .s { font-weight:600; } #subjects .r { color:#5b6069; text-align:right; }
+  #holds { margin-top:6px; font-size:12px; color:#5b6069; }
+  #holds b { color:var(--ink); }
+  #legend { display:flex; gap:14px; flex-wrap:wrap; margin-top:10px; font-size:11.5px; color:#5b6069; }
+  #legend i { display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:5px; vertical-align:-2px; border:2px solid; }
+  #legend .l-hold i { background:#1c1e21; border-color:#1c1e21; }
+  #legend .l-acc i { background:#fdf3e3; border-color:#b26a00; }
+  #legend .l-mat i { background:#d9f0e1; border-color:var(--ok); }
+  #legend .l-rej i { background:#fdecea; border-color:var(--no); }
+  #legend .l-idle i { background:#fff; border-color:var(--idle); border-style:dashed; } .role .perms { font-size:10.5px; fill:#5b6069; }
+  .role.accept rect { stroke:#b26a00; stroke-width:2.4; fill:#fdf3e3; }
+  .role.match rect  { stroke:var(--ok); stroke-width:3;   fill:#d9f0e1; }
+  .role.reject rect { stroke:var(--no); stroke-width:2.4; fill:#fdecea; }
+  .role.idle rect   { stroke:var(--idle); stroke-dasharray:4 3; }
+  .hedge { stroke:var(--edge); stroke-width:1.6; fill:none; marker-end:url(#arr); }
+  form label { display:block; margin:10px 0 4px; font-size:12px; color:#5b6069; }
+  select, input[type=range] { width:100%; padding:7px; border:1px solid #cfd3d9; border-radius:7px; background:#fff; font:inherit; }
+  button { margin-top:14px; width:100%; padding:10px; border:0; border-radius:8px; background:#1c1e21; color:#fff; font:inherit; cursor:pointer; }
+  #verdict { margin-top:14px; padding:10px 12px; border-radius:8px; font-weight:600; display:none; }
+  #verdict.ok { display:block; background:#eaf6ee; color:var(--ok); }
+  #verdict.no { display:block; background:#fdecea; color:var(--no); }
+  #verdict.err { display:block; background:#fff4e5; color:#b26a00; }
+  #trace { margin:12px 0 0; padding:0; list-style:none; }
+  #trace li { padding:8px 10px; border-left:3px solid var(--edge); margin-bottom:6px; background:#fafbfc; border-radius:0 6px 6px 0; }
+  #trace li.accept { border-color:#b26a00; } #trace li.match { border-color:var(--ok); } #trace li.reject { border-color:var(--no); }
+  #trace .who { font-weight:600; } #trace .src, #trace .why { display:block; font-size:12px; color:#5b6069; }
+  #hourv { font-variant-numeric:tabular-nums; }
+  footer { padding:0 22px 18px; color:#8a8f98; font-size:12px; }
+</style>
+</head>
+<body>
+<header><h1>RoleForge <span>— live role graph &amp; decision simulator (read-only)</span></h1></header>
+<main>
+  <section class="card"><h2>Role graph</h2><svg id="g" viewBox="0 0 760 460"></svg>
+    <div id="legend">
+      <span class="l-hold"><i></i>held by selected subject</span>
+      <span class="l-acc"><i></i>passed plugin checks, but no matching grant</span>
+      <span class="l-mat"><i></i>permission matched here</span>
+      <span class="l-rej"><i></i>rejected (reason in trace)</span>
+      <span class="l-idle"><i></i>not part of this decision</span>
+    </div></section>
+  <div class="rightcol">
+  <section class="card"><h2>Subjects &amp; their roles</h2>
+    <ul id="subjects"></ul>
+  </section>
+  <section class="card"><h2>Simulate a check</h2>
+    <form id="f">
+      <label>Subject</label><select id="subject"></select><div id="holds"></div>
+      <label>Action</label><select id="action"></select>
+      <label>Resource</label><select id="resource"></select>
+      <label>Tenant</label><select id="tenant"></select>
+      <label>Time of day: <b id="hourv">14:30</b></label>
+      <input type="range" id="hour" min="0" max="23" value="14">
+      <button type="submit">Explain decision</button>
+    </form>
+    <div id="verdict"></div>
+    <ul id="trace"></ul>
+  </section>
+  </div>
+</main>
+<footer>Every result comes from the engine's own <code>explain()</code> — the page renders traces, it decides nothing.</footer>
+<script>
+const $ = id => document.getElementById(id);
+let GRAPH = null, POS = {}, ASSIGN = {};
+
+async function j(url, opts) { const r = await fetch(url, opts); return r.json(); }
+
+function layout(g) {
+  // depth via parent chain (root = no parent)
+  const byId = Object.fromEntries(g.roles.map(r => [r.id, r]));
+  const depth = r => { let d = 0, cur = r; while (cur.parentId) { d++; cur = byId[cur.parentId]; } return d; };
+  const cols = {};
+  for (const r of g.roles) { const d = depth(r); (cols[d] ??= []).push(r); }
+  const colW = 240, x0 = 30, y0 = 30, rh = 74, gap = 26;
+  for (const [d, rs] of Object.entries(cols))
+    rs.forEach((r, i) => POS[r.id] = { x: x0 + d * colW, y: y0 + i * (rh + gap), w: 200, h: rh });
+}
+
+function permsOf(g, roleId) {
+  const pById = Object.fromEntries(g.permissions.map(p => [p.id, p]));
+  return g.rolePermissions.filter(e => e.from === roleId).map(e => pById[e.to]).filter(Boolean)
+          .map(p => p.action + ":" + p.resource);
+}
+
+function heldRoleIds() {
+  return new Set((ASSIGN[$("subject").value] ?? []).map(r => r.id));
+}
+function renderSubjects() {
+  const ul = $("subjects"); ul.innerHTML = "";
+  for (const [name, roles] of Object.entries(ASSIGN)) {
+    const li = document.createElement("li");
+    li.innerHTML = `<span class="s"></span><span class="r"></span>`;
+    li.querySelector(".s").textContent = name;
+    li.querySelector(".r").textContent = roles.length ? roles.map(r => r.name).join(", ") : "no roles";
+    li.classList.toggle("sel", name === $("subject").value);
+    li.onclick = () => { $("subject").value = name; $("subject").onchange(); };
+    ul.appendChild(li);
+  }
+}
+function showHolds() {
+  const roles = ASSIGN[$("subject").value] ?? [];
+  $("holds").innerHTML = roles.length
+    ? "holds: " + roles.map(r => "<b>" + r.name + "</b>").join(", ")
+    : "holds: <b>no roles</b> — every check will be denied";
+}
+function draw(g, marks = {}) {
+  const heldIds = heldRoleIds();
+  const svg = $("g");
+  const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+  let out = `<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#b9bec7"/></marker></defs>`;
+  for (const e of g.hierarchy) {                      // child -> parent (extends)
+    const a = POS[e.from], b = POS[e.to]; if (!a || !b) continue;
+    out += `<path class="hedge" d="M ${a.x} ${a.y + a.h/2} C ${a.x-40} ${a.y+a.h/2}, ${b.x+b.w+40} ${b.y+b.h/2}, ${b.x+b.w} ${b.y+b.h/2}"/>`;
+  }
+  for (const r of g.roles) {
+    const p = POS[r.id], cls = marks[r.id] ?? "idle";
+    const meta = r.meta && Object.keys(r.meta).length ? Object.keys(r.meta).join(", ") : "";
+    const title = esc(r.name) + (meta ? " \u00b7 " + esc(meta) : "");
+    out += `<g class="role ${cls}"><rect x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" rx="8"/>` +
+           `<text class="name" x="${p.x+10}" y="${p.y+20}">${title}</text>` +
+           `<text class="perms" x="${p.x+10}" y="${p.y+40}">${esc(permsOf(g, r.id).join(", ") || "— no direct grants")}</text>` +
+           `<text class="perms" x="${p.x+10}" y="${p.y+58}">extends: ${esc(r.parentId ? (g.roles.find(x=>x.id===r.parentId)?.name ?? "?") : "—")}</text>` +
+           (heldIds.has(r.id) ? `<g class="holder"><rect x="${p.x+p.w-66}" y="${p.y-9}" width="62" height="18" rx="9"/><text x="${p.x+p.w-35}" y="${p.y+4}" text-anchor="middle">${esc($("subject").value)}</text></g>` : "") +
+           `</g>`;
+  }
+  svg.innerHTML = out;
+}
+
+function renderDecision(d, req) {
+  const v = $("verdict");
+  const what = `${req.subject} · ${req.action}:${req.resource} @ ${req.tenantId}, ${String(req.hour).padStart(2,"0")}:30`;
+  v.className = d.granted ? "ok" : "no";
+  v.textContent = (d.granted ? "GRANTED — " : "DENIED — ") + what;
+  const marks = {}, ul = $("trace"); ul.innerHTML = "";
+  for (const n of d.trace) {
+    const veto = (n.conditions || []).find(c => !c.admissible);
+    const kind = veto ? "reject" : (n.matchedPermissions ? "match" : "accept");
+    marks[n.roleId] = kind;
+    const li = document.createElement("li");
+    li.className = kind;
+    const src = n.source === "direct" ? "held directly" : "inherited via " + (n.source?.inheritedVia ?? "?");
+    li.innerHTML = `<span class="who"></span><span class="src"></span><span class="why"></span>`;
+    li.querySelector(".who").textContent = n.roleName;
+    li.querySelector(".src").textContent = src;
+    li.querySelector(".why").textContent = veto
+        ? "rejected — " + veto.reason
+        : (n.matchedPermissions
+            ? `grants ${req.action}:${req.resource} — the decision was made here`
+            : `passed plugin checks, but holds no "${req.action}:${req.resource}" permission`);
+    ul.appendChild(li);
+  }
+  if (d.trace.length === 0) {
+    const li = document.createElement("li");
+    li.className = "reject";
+    li.textContent = `${req.subject} holds no roles — denied by default`;
+    ul.appendChild(li);
+  }
+  draw(GRAPH, marks);
+}
+
+(async () => {
+  const meta = await j("/api/meta");
+  for (const [id, list] of [["subject", meta.subjects], ["action", meta.actions], ["resource", meta.resources], ["tenant", meta.tenants]])
+    $(id).innerHTML = list.map(v => `<option>${v}</option>`).join("");
+  GRAPH = await j("/api/graph");
+  ASSIGN = await j("/api/subjects");
+  layout(GRAPH); draw(GRAPH); showHolds();
+  $("subject").onchange = () => { showHolds(); renderSubjects(); draw(GRAPH); $("verdict").className=""; $("trace").innerHTML=""; };
+  renderSubjects();
+  $("hour").oninput = () => $("hourv").textContent = String($("hour").value).padStart(2, "0") + ":30";
+  $("f").onsubmit = async ev => {
+    ev.preventDefault();
+    const body = { subject: $("subject").value, action: $("action").value, resource: $("resource").value,
+                   tenantId: $("tenant").value, hour: Number($("hour").value) };
+    try {
+      renderDecision(await j("/api/explain", { method: "POST", body: JSON.stringify(body) }), body);
+    } catch (e) {
+      const v = $("verdict"); v.className = "err"; v.textContent = "ERROR — no answer from the server (is it running?)";
+    }
+  };
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "@roleforge/visualizer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Read-only role-graph visualizer and decision simulator over the RoleForge introspection API",
+  "scripts": {
+    "start": "tsx server.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@roleforge/core": "0.1.0",
+    "@roleforge/plugin-temporal": "0.1.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2"
+  }
+}
