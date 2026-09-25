@@ -104,6 +104,25 @@ Four namespaced tables in **your** database, created by `migrations/001_initial.
 
 Other databases: implement the `StorageAdapter` interface from `@roleforge/core` (the in-memory adapter is a ~180-line reference).
 
+## Demo applications & the visualizer
+
+The repository ships a runnable multi-tenant demonstration (two tenants, an admin → manager → member hierarchy, a tenant-limited role, a time-limited night-auditor) in two variants — protected by RoleForge and, for comparison, by node-casbin:
+
+```bash
+npm install && npm run build          # build once: the apps import the built packages
+npx tsx apps/demo/src/usecase.ts 14         # RoleForge variant, simulated 14:30
+npx tsx apps/demo/src/usecase.ts 23         # same scenario at 23:30 (night-auditor active)
+npx tsx apps/demo-casbin/src/usecase.ts 14  # identical scenario under node-casbin
+```
+
+On top of the same model runs a **read-only visualizer** — a live role graph plus a decision simulator:
+
+```bash
+npm start --workspace=@roleforge/visualizer   # → http://localhost:5173
+```
+
+The left panel renders the role graph from `graph()` (each role with its direct grants, parent link, and plugin settings). A subjects panel lists who holds which roles, via `subjectRoles()`. The simulator sends your chosen subject, action, resource, tenant, and time of day to `explain()` and renders the verdict with the full trace: every candidate role colored by outcome — rejected (with the plugin's reason), passed-but-no-matching-grant, or the role where the permission matched. The page contains no authorization logic of its own; everything on screen is the engine's own output. Editing the model from the UI is intentionally not supported.
+
 ## Development & tests
 
 ```bash
@@ -116,25 +135,6 @@ docker compose up -d
 TEST_DATABASE_URL=postgres://roleforge:roleforge@localhost:54329/roleforge_test npx vitest run packages/adapters/postgres
 ```
 
-## LICENSE
-MIT License
+## License
 
-Copyright (c) 2026 Your Name
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.   
+MIT — see [LICENSE](./LICENSE).
